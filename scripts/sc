@@ -21,7 +21,7 @@ if len(argv) > 1 and (argv[1] == 's' or argv[1] == 'set'):
         else:
             value = check_output('xclip -selection clipboard -o', shell=True)
     else:
-        value = sys.argv[2]
+        value = argv[2]
     print post(DOMAIN + '/set', json={'token': token, 'value': value})
 
 elif len(argv) > 1 and (argv[1] == 'g' or argv[1] == 'get'):
@@ -39,5 +39,4 @@ elif len(argv) > 1 and (argv[1] == 'l' or argv[1] == 'list'):
         n = '10'
     else:
         n = argv[2]
-    resp = post(DOMAIN + '/list', json={'token': token, 'n': n})
-    print resp
+    print post(DOMAIN + '/list', json={'token': token, 'n': n})
