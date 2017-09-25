@@ -1,4 +1,5 @@
 from flask import Flask, request
+from os import environ, path
 
 SC_PATH = environ.get('SC_PATH')
 if not SC_PATH:
@@ -7,7 +8,7 @@ if not SC_PATH:
 
 app = Flask(__name__, root_path=path.join(SC_PATH, 'sc/'), static_url_path="/static")
 
-with open(path.join(SC_PATH, "sc/secret_token"), 'r') as f:
+with open(path.join(SC_PATH, "secret_token"), 'r') as f:
     secret_token = secret_key_file.readline()
 
 #########################################
@@ -17,53 +18,66 @@ with open(path.join(SC_PATH, "sc/secret_token"), 'r') as f:
 @app.route('/set', methods=['POST'])
 def set():
     global secret_token
-    token = request.args.get('token', '')
-    if not token:
-        return 'bad'
+    req = request.get_json()
+    try:
+        token = req['token']
+    except:
+        return '[ERROR] Did not pass token.'
     if token != secret_token:
-        return 'bad'
-    value = request.args.get('value', '')
+        return '[ERROR] Token is incorrect.'
+
+    try:
+        value = req['value']
+    except:
+        return '[ERROR] Did not pass value.'
     if not value:
-        return 'bad'
+        return '[ERROR] Value is blank.'
+
     with open(path.join(SC_PATH, "sc/data.txt"), 'a') as f:
         f.write(value + '\n')
-    return ''
+    return value
 
-@app.route('/get')
+@app.route('/get', methods=['POST'])
 def get():
     global secret_token
-    token = request.args.get('token', '')
-    if not token:
-        return 'bad'
+    req = request.get_json()
+    try:
+        token = req['token']
+    except:
+        return '[ERROR] Did not pass token.'
     if token != secret_token:
-        return 'bad'
-    index = request.args.get('index', '')
-    if index:
-        idx = int(index)
-    else:
+        return '[ERROR] Token is incorrect.'
+
+    try:
+        idx = int(req['idx'])
+    except:
         idx = 0
     i = -1 - idx
+
     with open(path.join(SC_PATH, "sc/data.txt"), 'r') as f:
         lines = f.readlines()
         if len(lines) < idx:
-            value = 'bad'
+            value = '[ERROR] Index does not exist.'
         else:
             value = lines[i].rstrip('\n')
     return value
 
-@app.route('/list')
+@app.route('/list', methods=['POST'])
 def list():
     global secret_token
-    token = request.args.get('token', '')
-    if not token:
-        return 'bad'
+    req = request.get_json()
+    try:
+        token = req['token']
+    except:
+        return '[ERROR] Did not pass token.'
     if token != secret_token:
-        return 'bad'
-    num = request.args.get('n', '')
-    if num:
-        n = int(num)
-    else:
+        return '[ERROR] Token is incorrect.'
+
+    try:
+        n = int(req['n'])
+    except:
         n = 10
+
     with open(path.join(SC_PATH, "sc/data.txt"), 'r') as f:
         lines = f.readlines()
         if len(lines) < n:
