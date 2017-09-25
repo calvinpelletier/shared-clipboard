@@ -1,0 +1,11 @@
+#!/usr/bin/python
+import sys
+
+from subprocess import call
+
+with open('/home/calvin/projects/shared-clipboard/sc/secret_token', 'r') as f:
+    token = f.read().rstrip('\n')
+
+if len(sys.argv) == 3 and (sys.argv[1] == 's' or sys.argv[1] == 'set'):
+    value = sys.argv[2]
+    call('curl --data "token={}&value={}" http://ec2-54-212-225-107.us-west-2.compute.amazonaws.com:5000/set', shell=True)
