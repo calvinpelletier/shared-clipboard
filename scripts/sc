@@ -20,6 +20,7 @@ def print_usage():
 
 if not isfile(TOKEN_FILE):
     print '[ERROR] token file does not exist.'
+    exit(1)
 
 with open(TOKEN_FILE, 'r') as f:
     token = f.read().rstrip('\n')
