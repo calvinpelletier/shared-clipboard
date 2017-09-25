@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from os import environ, path
 
 SC_PATH = environ.get('SC_PATH')
@@ -8,11 +8,8 @@ if not SC_PATH:
 
 app = Flask(__name__, root_path=path.join(SC_PATH, 'sc/'), static_url_path="/static")
 
-with open(path.join(SC_PATH, "secret_token"), 'r') as f:
+with open(path.join(SC_PATH, 'secret_token'), 'r') as f:
     secret_token = f.readline()
-
-def gen_resp(resp):
-    return jsonify({'resp': resp})
 
 #########################################
 # ENDPOINTS
@@ -25,20 +22,20 @@ def set():
     try:
         token = req['token']
     except:
-        return gen_resp('[ERROR] Did not pass token.')
+        return '[ERROR] Did not pass token.'
     if token != secret_token:
-        return gen_resp('[ERROR] Token is incorrect.')
+        return '[ERROR] Token is incorrect.'
 
     try:
         value = req['value']
     except:
-        return gen_resp('[ERROR] Did not pass value.')
+        return '[ERROR] Did not pass value.'
     if not value:
-        return gen_resp('[ERROR] Value is blank.')
+        return '[ERROR] Value is blank.'
 
     with open(path.join(SC_PATH, "sc/data.txt"), 'a') as f:
         f.write(value + '\n')
-    return gen_resp(value)
+    return value
 
 @app.route('/get', methods=['POST'])
 def get():
@@ -47,9 +44,9 @@ def get():
     try:
         token = req['token']
     except:
-        return gen_resp('[ERROR] Did not pass token.')
+        return '[ERROR] Did not pass token.'
     if token != secret_token:
-        return gen_resp('[ERROR] Token is incorrect.')
+        return '[ERROR] Token is incorrect.'
 
     try:
         idx = int(req['idx'])
@@ -63,7 +60,7 @@ def get():
             value = '[ERROR] Index does not exist.'
         else:
             value = lines[i].rstrip('\n')
-    return gen_resp(value)
+    return value
 
 @app.route('/list', methods=['POST'])
 def list():
@@ -72,9 +69,9 @@ def list():
     try:
         token = req['token']
     except:
-        return gen_resp('[ERROR] Did not pass token.')
+        return '[ERROR] Did not pass token.'
     if token != secret_token:
-        return gen_resp('[ERROR] Token is incorrect.')
+        return '[ERROR] Token is incorrect.'
 
     try:
         n = int(req['n'])
@@ -88,7 +85,7 @@ def list():
         value = ''
         for i in range(n):
             value += str(i) + ': ' + lines[-1 - i]
-    return gen_resp(value)
+    return value
 
 #########################################
 # MAIN ENTRY POINT OF FLASK APP

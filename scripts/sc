@@ -22,14 +22,14 @@ if len(argv) > 1 and (argv[1] == 's' or argv[1] == 'set'):
             value = check_output('xclip -selection clipboard -o', shell=True)
     else:
         value = argv[2]
-    print post(DOMAIN + '/set', json={'token': token, 'value': value})
+    print post(DOMAIN + '/set', json={'token': token, 'value': value}).text
 
 elif len(argv) > 1 and (argv[1] == 'g' or argv[1] == 'get'):
     if len(argv) == 2:
         idx = '0'
     else:
         idx = argv[2]
-    resp = post(DOMAIN + '/get', json={'token': token, 'idx': idx})
+    resp = post(DOMAIN + '/get', json={'token': token, 'idx': idx}).text
     print resp
     resp.replace('"', '\\"')
     call('echo "{}" | xclip -selection clipboard'.format(resp), shell=True)
@@ -39,4 +39,4 @@ elif len(argv) > 1 and (argv[1] == 'l' or argv[1] == 'list'):
         n = '10'
     else:
         n = argv[2]
-    print post(DOMAIN + '/list', json={'token': token, 'n': n})
+    print post(DOMAIN + '/list', json={'token': token, 'n': n}).text
