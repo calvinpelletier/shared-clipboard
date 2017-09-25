@@ -45,8 +45,9 @@ elif len(argv) > 1 and (argv[1] == 'g' or argv[1] == 'get'):
         print resp
     else:
         print '(in clipboard): ' + resp
+        resp = resp.rstrip('\n')
         resp.replace('"', '\\"')
-        call('echo "{}" | xclip -selection clipboard'.format(resp), shell=True)
+        call('echo -n "{}" | xclip -selection clipboard'.format(resp), shell=True)
 
 elif len(argv) > 1 and (argv[1] == 'l' or argv[1] == 'list'):
     if len(argv) == 2:
