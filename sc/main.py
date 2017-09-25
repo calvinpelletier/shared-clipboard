@@ -9,7 +9,7 @@ if not SC_PATH:
 app = Flask(__name__, root_path=path.join(SC_PATH, 'sc/'), static_url_path="/static")
 
 with open(path.join(SC_PATH, 'secret_token'), 'r') as f:
-    secret_token = f.readline()
+    secret_token = f.read().rstrip('\n')
 
 #########################################
 # ENDPOINTS
