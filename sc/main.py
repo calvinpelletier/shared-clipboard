@@ -56,7 +56,7 @@ def get():
 
     with open(path.join(SC_PATH, "sc/data.txt"), 'r') as f:
         lines = f.readlines()
-        if len(lines) < idx:
+        if len(lines) <= idx:
             value = '[ERROR] Index does not exist.'
         else:
             value = lines[i].rstrip('\n')
