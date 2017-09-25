@@ -25,20 +25,20 @@ def set():
     try:
         token = req['token']
     except:
-        gen_resp('[ERROR] Did not pass token.')
+        return gen_resp('[ERROR] Did not pass token.')
     if token != secret_token:
-        gen_resp('[ERROR] Token is incorrect.')
+        return gen_resp('[ERROR] Token is incorrect.')
 
     try:
         value = req['value']
     except:
-        gen_resp('[ERROR] Did not pass value.')
+        return gen_resp('[ERROR] Did not pass value.')
     if not value:
-        gen_resp('[ERROR] Value is blank.')
+        return gen_resp('[ERROR] Value is blank.')
 
     with open(path.join(SC_PATH, "sc/data.txt"), 'a') as f:
         f.write(value + '\n')
-    gen_resp(value)
+    return gen_resp(value)
 
 @app.route('/get', methods=['POST'])
 def get():
@@ -47,9 +47,9 @@ def get():
     try:
         token = req['token']
     except:
-        gen_resp('[ERROR] Did not pass token.')
+        return gen_resp('[ERROR] Did not pass token.')
     if token != secret_token:
-        gen_resp('[ERROR] Token is incorrect.')
+        return gen_resp('[ERROR] Token is incorrect.')
 
     try:
         idx = int(req['idx'])
@@ -72,9 +72,9 @@ def list():
     try:
         token = req['token']
     except:
-        gen_resp('[ERROR] Did not pass token.')
+        return gen_resp('[ERROR] Did not pass token.')
     if token != secret_token:
-        gen_resp('[ERROR] Token is incorrect.')
+        return gen_resp('[ERROR] Token is incorrect.')
 
     try:
         n = int(req['n'])
