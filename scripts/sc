@@ -6,7 +6,7 @@ from os.path import isfile
 from select import select
 
 TOKEN_FILE = '/home/calvin/projects/shared-clipboard/secret_token'
-DOMAIN = 'http://pelletier.io'
+DOMAIN = 'http://sc.pelletier.io'
 
 if not isfile(TOKEN_FILE):
     print '[ERROR] token file does not exist.'
