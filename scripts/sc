@@ -8,8 +8,19 @@ from select import select
 TOKEN_FILE = '/home/calvin/projects/shared-clipboard/secret_token'
 DOMAIN = 'http://sc.pelletier.io'
 
+def print_usage():
+    print 'USAGE'
+    print 'set from clipboard: sc s'
+    print 'set from stdin: some_command | sc s'
+    print 'set from value: sc s "some value"'
+    print 'get most recent: sc g'
+    print 'get nth most recent: sc g n'
+    print 'list 10 most recent: sc l'
+    print 'list n mot recent: sc l n'
+
 if not isfile(TOKEN_FILE):
     print '[ERROR] token file does not exist.'
+    exit(1)
 
 with open(TOKEN_FILE, 'r') as f:
     token = f.read().rstrip('\n')
@@ -30,9 +41,13 @@ elif len(argv) > 1 and (argv[1] == 'g' or argv[1] == 'get'):
     else:
         idx = argv[2]
     resp = post(DOMAIN + '/get', json={'token': token, 'idx': idx}).text
-    print resp
-    resp.replace('"', '\\"')
-    call('echo "{}" | xclip -selection clipboard'.format(resp), shell=True)
+    if resp.startswith('[ERROR]'):
+        print resp
+    else:
+        print '(in clipboard): ' + resp
+        resp = resp.rstrip('\n')
+        resp.replace('"', '\\"')
+        call('echo -n "{}" | xclip -selection clipboard'.format(resp), shell=True)
 
 elif len(argv) > 1 and (argv[1] == 'l' or argv[1] == 'list'):
     if len(argv) == 2:
@@ -40,3 +55,5 @@ elif len(argv) > 1 and (argv[1] == 'l' or argv[1] == 'list'):
     else:
         n = argv[2]
     print post(DOMAIN + '/list', json={'token': token, 'n': n}).text
+else:
+    print_usage()

@@ -1,0 +1,2 @@
+sudo apt install xclip
+sudo pip install requests
