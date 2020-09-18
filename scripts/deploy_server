@@ -1,3 +1,3 @@
-sudo cp /var/www/shared-clipboard/sc.conf /etc/apache2/sites-available/
+sudo cp /var/www/shared-clipboard/sc.conf /var/www/shared-clipboard/sc-le-ssl.conf /etc/apache2/sites-available/
 sudo a2ensite sc
 sudo service apache2 restart
