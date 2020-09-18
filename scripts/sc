@@ -6,7 +6,7 @@ from os.path import isfile
 from select import select
 
 TOKEN_FILE = '/home/calvin/projects/shared-clipboard/secret_token'
-DOMAIN = 'http://sc.pelletier.io'
+DOMAIN = 'https://sc.pelletier.io'
 
 def print_usage():
     print 'USAGE'
